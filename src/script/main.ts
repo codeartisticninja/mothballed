@@ -11,30 +11,37 @@ function init() {
   // game = (<any>window)["game"] = new MyGame("#game");
   // game.debug = location.search.indexOf("debug") !== -1;
   let slideshow = document.querySelector("#slideshow");
-  let vignette = document.querySelector(".vignette");
   window.addEventListener("resize", () => {
     resize();
   });
   resize();
-  window.addEventListener("hashchange", () => {
-    prevSlide();
+  window.addEventListener("hashchange", (e) => {
+    if (location.hash.length > 1) return;
+    changeSlide(e, true);
+  });
+  document.body.addEventListener("keypress", (e: Event) => {
+    changeSlide(e);
   });
   document.body.addEventListener("click", (e: Event) => {
-    nextSlide(e);
+    changeSlide(e);
   });
-  nextSlide();
-  vignette && vignette.addEventListener("mousemove", () => {
-    (<HTMLElement>vignette).style.display = "none";
-    (<HTMLElement>vignette).classList.add("bright");
+  changeSlide();
+  document.body.addEventListener("mousemove", () => {
+    flash();
   });
 }
 
-function nextSlide(e?: Event) {
+function changeSlide(e?: Event, reverse = false) {
+  flash();
   if (e && (<HTMLElement>e.target).tagName.toLowerCase() === "a") return;
-  let vignette = document.querySelector(".vignette");
+  let vignette = <HTMLElement>document.querySelector(".vignette");
   let show = false;
-  let i = 0, dias, dia = document.querySelectorAll(".dias");
-  while (dias = dia.item(i++)) {
+  let i = -1, di = 1, dias, dia = document.querySelectorAll(".dias");
+  if (reverse) {
+    i = dia.length;
+    di = -1;
+  }
+  while (dias = dia.item(i += di)) {
     if (show) {
       dias.classList.add("show");
       dias.classList.remove("hide");
@@ -50,10 +57,13 @@ function nextSlide(e?: Event) {
   if (!document.querySelector(".show")) {
     let first = document.querySelector(".dias");
     first && first.classList.add("show");
+    first && first.classList.remove("hide");
   }
-  (<HTMLElement>vignette).removeAttribute("style");
   setTimeout(() => {
-    (<HTMLElement>vignette).classList.remove("bright");
+    vignette.removeAttribute("style");
+    setTimeout(() => {
+      vignette.classList.remove("bright");
+    }, 32);
   }, 32);
   setTimeout(() => {
     if (!(<Element>document.querySelector(".dias")).classList.contains("show")) {
@@ -61,32 +71,11 @@ function nextSlide(e?: Event) {
     }
   }, 256);
 }
-function prevSlide() {
-  if (location.hash.length > 1) return;
-  let show = false;
-  let dias, dia = document.querySelectorAll(".dias"), i = dia.length;
-  while (dias = dia.item(--i)) {
-    if (show) {
-      dias.classList.add("show");
-      dias.classList.remove("hide");
-      show = false;
-    } else {
-      if (dias.classList.contains("show")) {
-        show = true;
-      }
-      dias.classList.add("hide");
-      dias.classList.remove("show");
-    }
-  }
-  if (!document.querySelector(".show")) {
-    let first = document.querySelector(".dias");
-    first && first.classList.add("show");
-  }
-  setTimeout(() => {
-    if (!(<Element>document.querySelector(".dias")).classList.contains("show")) {
-      location.assign("#~");
-    }
-  }, 512);
+
+function flash() {
+  let vignette = <HTMLElement>document.querySelector(".vignette");
+  vignette.style.display = "none";
+  vignette.classList.add("bright");
 }
 
 function resize() {
