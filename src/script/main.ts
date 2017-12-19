@@ -19,8 +19,8 @@ function init() {
   window.addEventListener("hashchange", () => {
     prevSlide();
   });
-  document.body.addEventListener("click", () => {
-    nextSlide();
+  document.body.addEventListener("click", (e: Event) => {
+    nextSlide(e);
   });
   nextSlide();
   vignette && vignette.addEventListener("mousemove", () => {
@@ -29,7 +29,8 @@ function init() {
   });
 }
 
-function nextSlide() {
+function nextSlide(e?: Event) {
+  if (e && (<HTMLElement>e.target).tagName.toLowerCase() === "a") return;
   let vignette = document.querySelector(".vignette");
   let show = false;
   let i = 0, dias, dia = document.querySelectorAll(".dias");
