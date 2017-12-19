@@ -35,7 +35,7 @@ html {
   width: 33.333em;
   height: 25em;
 
-  h1 { font-size: 4em; margin: .5em; }
+  h1 { font-size: 4em; margin: .25em; }
   p { font-size: 2em; }
   h1, p {
     text-align: center;
@@ -88,8 +88,13 @@ html {
     background-image: url("../images/vignette.png");
     opacity: .5;
     position: absolute;
+    transition: opacity 1s linear;
     width: 33.333em;
     height: 25em;
+
+    &.bright {
+      opacity: 0;
+    }
   }
 }
 

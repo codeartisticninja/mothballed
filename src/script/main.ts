@@ -25,13 +25,12 @@ function init() {
   nextSlide();
   vignette && vignette.addEventListener("mousemove", () => {
     (<HTMLElement>vignette).style.display = "none";
-    setTimeout(() => {
-      (<HTMLElement>vignette).removeAttribute("style");
-    }, 1024);
+    (<HTMLElement>vignette).classList.add("bright");
   });
 }
 
 function nextSlide() {
+  let vignette = document.querySelector(".vignette");
   let show = false;
   let i = 0, dias, dia = document.querySelectorAll(".dias");
   while (dias = dia.item(i++)) {
@@ -51,6 +50,10 @@ function nextSlide() {
     let first = document.querySelector(".dias");
     first && first.classList.add("show");
   }
+  (<HTMLElement>vignette).removeAttribute("style");
+  setTimeout(() => {
+    (<HTMLElement>vignette).classList.remove("bright");
+  }, 32);
   setTimeout(() => {
     if (!(<Element>document.querySelector(".dias")).classList.contains("show")) {
       location.assign("#~");
