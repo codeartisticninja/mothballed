@@ -12,6 +12,10 @@ html {
   background-color: black;
   color: white;
 
+  body {
+    height: 100vh;
+  }
+
   h1 {
     font-size: 2em;
   }
@@ -31,7 +35,7 @@ html {
   width: 33.333em;
   height: 25em;
 
-  h1 { font-size: 4em; }
+  h1 { font-size: 4em; margin: .5em; }
   p { font-size: 2em; }
   h1, p {
     text-align: center;
@@ -53,6 +57,14 @@ html {
     top: -9em;
     width: 29.333em;
     height: 21em;
+
+    a {
+      background-color: #123;
+      border: 1px solid white;
+      border-radius: 1em;
+      padding: 0.25em 0.5em;
+      text-decoration: none;
+    }
   
     &.hide {
       filter: blur(1em);
@@ -69,8 +81,7 @@ html {
 
 
     &.white {
-      background-color: white;
-      background-image: none;
+      opacity: 0;
     }
   }
   .vignette {

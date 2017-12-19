@@ -11,6 +11,7 @@ function init() {
   // game = (<any>window)["game"] = new MyGame("#game");
   // game.debug = location.search.indexOf("debug") !== -1;
   let slideshow = document.querySelector("#slideshow");
+  let vignette = document.querySelector(".vignette");
   window.addEventListener("resize", () => {
     resize();
   });
@@ -18,10 +19,16 @@ function init() {
   window.addEventListener("hashchange", () => {
     prevSlide();
   });
-  slideshow && slideshow.addEventListener("click", () => {
+  document.body.addEventListener("click", () => {
     nextSlide();
   });
   nextSlide();
+  vignette && vignette.addEventListener("mousemove", () => {
+    (<HTMLElement>vignette).style.display = "none";
+    setTimeout(() => {
+      (<HTMLElement>vignette).removeAttribute("style");
+    }, 1024);
+  });
 }
 
 function nextSlide() {
