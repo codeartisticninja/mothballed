@@ -43,11 +43,11 @@ function init() {
 
 function changeSlide(e?: Event, reverse = false) {
   flash();
+  if (e && (<HTMLElement>e.target).tagName === "A") return;
   slideSnd.play();
   if (!ttm--) setTimeout(() => {
     music.play("./music/Thinking Music.mp3", true);
   }, 1024);
-  if (e && (<HTMLElement>e.target).tagName === "A") return;
   let vignette = <HTMLElement>document.querySelector(".vignette");
   let show = false;
   let i = -1, di = 1, dias, dia = document.querySelectorAll(".dias");
