@@ -17,11 +17,11 @@ var os = require("os"),
   md5 = require("md5");
 
 /**
- * Jakefile.js
- * For building web apps
- *
- * @date 16-dec-2017
- */
+* Jakefile.js
+* For building web apps
+*
+* @date 20-dec-2017
+*/
 var srcDir = "./src/",
   outDir = "./build/",
   staticFiles = null,
@@ -61,7 +61,7 @@ task("deploy", ["default"], { async: true }, function () {
     deletedFiles = [];
 
   try {
-    hashes = require(outDir+"_hashes.json");
+    hashes = require(outDir + "_hashes.json");
   } catch (err) {
     hashes = {};
   }
@@ -74,7 +74,7 @@ task("deploy", ["default"], { async: true }, function () {
     var localFile = files.shift(),
       ftpFile = ftpDir + localFile.substr(localDir.length);
 
-    if (deletedFiles.indexOf(localFile)>=0) deletedFiles.splice(deletedFiles.indexOf(localFile), 1);
+    if (deletedFiles.indexOf(localFile) >= 0) deletedFiles.splice(deletedFiles.indexOf(localFile), 1);
     if (fs.statSync(localFile).isDirectory()) {
       var oldHash = hashes[localFile];
       var newHash = "dir";
@@ -120,7 +120,7 @@ task("deploy", ["default"], { async: true }, function () {
     } else {
       ftp.end();
       console.log("...dONE!");
-      fs.writeFileSync(outDir+"_hashes.json", JSON.stringify(hashes, null, 2));
+      fs.writeFileSync(outDir + "_hashes.json", JSON.stringify(hashes, null, 2));
       complete();
     }
   };
@@ -172,7 +172,13 @@ namespace("html", function () {
       output = pug.compile(output, pug_opts);
       output = output(data);
 
-      if (!debug) { output = htmlmin(output, htmlmin_opts); }
+      if (!debug) {
+        try {
+          output = htmlmin(output, htmlmin_opts);
+        } catch (error) {
+          console.log("Could not minify HTML!");
+        }
+      }
       jake.mkdirP(path.dirname(outFile));
       fs.writeFileSync(outFile, output);
     });
