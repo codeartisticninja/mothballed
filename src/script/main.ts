@@ -33,7 +33,7 @@ function init() {
 
 function changeSlide(e?: Event, reverse = false) {
   flash();
-  if (e && (<HTMLElement>e.target).tagName.toLowerCase() === "a") return;
+  if (e && (<HTMLElement>e.target).tagName === "A") return;
   let vignette = <HTMLElement>document.querySelector(".vignette");
   let show = false;
   let i = -1, di = 1, dias, dia = document.querySelectorAll(".dias");
@@ -69,7 +69,7 @@ function changeSlide(e?: Event, reverse = false) {
     if (!(<Element>document.querySelector(".dias")).classList.contains("show")) {
       location.assign("#~");
     }
-  }, 256);
+  }, 512);
 }
 
 function flash() {
