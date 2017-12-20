@@ -1,5 +1,5 @@
 Mothballed
 ==========
-A showcase of abandoned games..
+My gallery of failure..
 
 Made by [codeartistic.ninja](http://the.codeartistic.ninja/)
