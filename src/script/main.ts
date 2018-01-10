@@ -11,7 +11,7 @@ import StorageFile from "./_classes/utils/StorageFile";
 // var game: MyGame;
 let slideSnd = new Sound("./sound/agfa.wav");
 let music = new MediaPlayer();
-let prefs = new StorageFile("/prefs.json");
+let prefs = (<any>window)["prefs"] = new StorageFile("/prefs.json");
 let ttm = 2;
 
 function init() {

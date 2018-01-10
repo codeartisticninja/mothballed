@@ -8,23 +8,23 @@ import web from "./web";
  */
 
 interface Mark {
-  start:number,
-  duration?:number
+  start: number,
+  duration?: number
 }
 
 export default class Sound {
-  static enabled=true;
-  static volume=1;
-  static ctx:AudioContext;
-  gainNode:GainNode;
-  mainNode:AudioNode;
-  file:string;
-  source:AudioBufferSourceNode|null;
-  buffer:AudioBuffer;
-  marks:{[index:string]: Mark} = {};
-  oneInstance:boolean;
+  static enabled = true;
+  static volume = 1;
+  static ctx: AudioContext;
+  gainNode: GainNode;
+  mainNode: AudioNode;
+  file: string;
+  source: AudioBufferSourceNode | null;
+  buffer: AudioBuffer;
+  marks: { [index: string]: Mark } = {};
+  oneInstance: boolean;
 
-  constructor(src:string, cb?:Function) {
+  constructor(src: string, cb?: Function) {
     if (!Sound.ctx) {
       Sound.ctx = new (AudioContext || (<any>window)["webkitAudioContext"])();
     }
@@ -34,7 +34,7 @@ export default class Sound {
     this.mainNode = this.gainNode;
 
     this.setMark("_all", 0);
-    this.load(src, ()=>{
+    this.load(src, () => {
       if (this._playOnLoad) {
         this.play(this._playOnLoad);
       }
@@ -42,19 +42,20 @@ export default class Sound {
     });
   }
 
-  load(src=this.file, cb?:Function) {
-    if (!Sound.enabled) return;
+  load(src = this.file, cb?: Function) {
+    if (!Sound.enabled) return cb && cb();
     this.file = src;
-    web.get(src, { responseType: "arraybuffer" }, (req:XMLHttpRequest)=>{
+    web.get(src, { responseType: "arraybuffer" }, (req: XMLHttpRequest) => {
       var data = req.response;
-      Sound.ctx.decodeAudioData(data, (buffer)=>{
+      Sound.ctx.decodeAudioData(data, (buffer) => {
         this.buffer = buffer;
         cb && cb();
       });
     });
   }
 
-  play(mark="_all", loop=false) {
+  play(mark = "_all", loop = false) {
+    if (!Sound.enabled) return;
     if (this.source && this.oneInstance) {
       this.source.stop();
     }
@@ -67,11 +68,11 @@ export default class Sound {
     this.source.buffer = this.buffer;
     this.source.start(0, this.marks[mark].start, this.marks[mark].duration);
     if (loop && this.source.addEventListener) {
-      this.source.addEventListener("ended", ()=>{
+      this.source.addEventListener("ended", () => {
         this.source && this.play(mark, loop);
       })
     }
-    this._playOnLoad=null;
+    this._playOnLoad = null;
   }
 
   stop() {
@@ -82,10 +83,10 @@ export default class Sound {
       }
       this.source = null;
     }
-    this._playOnLoad=null;
+    this._playOnLoad = null;
   }
 
-  setMark(name:string, start:number, duration?:number) {
+  setMark(name: string, start: number, duration?: number) {
     this.marks[name] = {
       start: start,
       duration: duration
@@ -96,5 +97,5 @@ export default class Sound {
   /*
     _privates
   */
-  private _playOnLoad:string|null;
+  private _playOnLoad: string | null;
 }
